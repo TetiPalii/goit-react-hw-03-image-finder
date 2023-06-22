@@ -17,6 +17,7 @@ export class App extends Component {
   getSubmitValue = value => {
     this.setState({ value });
   };
+
   componentDidUpdate(_, prevState) {
     if (prevState.value !== this.state.value) {
       fetchImages(this.state.value, this.state.page)
