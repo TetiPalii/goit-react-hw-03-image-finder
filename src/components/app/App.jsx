@@ -4,7 +4,8 @@ import { SearchBar } from 'components/searchbar/Searchbar';
 import { fetchImages } from 'helpers/fetchImages';
 import { Component } from 'react';
 import css from './App.module.css';
-import { Audio } from 'react-loader-spinner';
+import { Circles } from 'react-loader-spinner';
+import { Modal } from 'components/modal/Modal';
 
 export class App extends Component {
   state = {
@@ -14,6 +15,8 @@ export class App extends Component {
     images: [],
     isLoading: false,
     error: null,
+    openModal: false,
+    largeImageURL: '',
   };
 
   getSubmitValue = value => {
@@ -50,27 +53,50 @@ export class App extends Component {
     this.setState(prevState => ({ page: prevState.page + 40 }));
   };
 
+  toggleModal = () => {
+    this.setState(prevState => ({ openModal: !prevState.openModal }));
+  };
+
+  renderModal = id => {
+    const modalData = this.state.images.find(image => {
+      return image.id === id;
+    });
+    this.setState({ largeImageURL: modalData.largeImageURL });
+  };
+
   render() {
     return (
       <div className={css.App}>
         <SearchBar onSubmit={this.getSubmitValue} />
         {this.state.error && <p> {this.state.error}</p>}
         {this.state.isLoading && (
-          <Audio
+          <Circles
             height="80"
             width="80"
-            radius="9"
-            color="green"
-            ariaLabel="three-dots-loading"
-            wrapperStyle
-            wrapperClass
+            color="#4fa94d"
+            ariaLabel="circles-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
           />
         )}
-        <ImageGallery images={this.state.images} />
+        <ImageGallery
+          images={this.state.images}
+          toggleModal={this.toggleModal}
+          value={this.state.value}
+          renderModal={this.renderModal}
+        />
         {this.state.images.length > 0 &&
           this.state.page !== this.state.totalPages && (
-            <Button onBtnClick={this.onLoadMoreClick} />
+            <Button onBtnClick={this.onLoadMoreClick}></Button>
           )}
+        {this.state.openModal && (
+          <Modal
+            largeImageURL={this.state.largeImageURL}
+            value={this.state.value}
+            toggleModal={this.toggleModal}
+          />
+        )}
       </div>
     );
   }
