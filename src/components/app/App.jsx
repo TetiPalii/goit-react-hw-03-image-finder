@@ -20,7 +20,7 @@ export class App extends Component {
   };
 
   getSubmitValue = value => {
-    this.setState({ value });
+    this.setState({ images: [], value, page: 1 });
   };
 
   componentDidUpdate(_, prevState) {
