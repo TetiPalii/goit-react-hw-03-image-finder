@@ -50,7 +50,7 @@ export class App extends Component {
   }
 
   onLoadMoreClick = e => {
-    this.setState(prevState => ({ page: prevState.page + 40 }));
+    this.setState(prevState => ({ page: prevState.page + 1 }));
   };
 
   toggleModal = () => {
